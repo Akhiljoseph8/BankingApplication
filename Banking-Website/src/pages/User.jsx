@@ -14,6 +14,7 @@ function User() {
     const [balance,setBalance] = useState(0)
     const [history, setHistory] = useState([])
     const handleClose = () =>{ setShow(false)
+      setAmount(0)
         setShow2(false), setShow3(false)
     };
     var data={}
@@ -28,7 +29,6 @@ function User() {
     const handleWithdraw = async() =>{
         setShow(true);
         var bal=0
-        console.log(amount)
         bal=balance-amount
         if(bal<0){
           alert("You have not enough balance")
@@ -38,20 +38,20 @@ function User() {
         setAmount(0)
         const header = {"Authorization":`Bearer ${sessionStorage.getItem('token')}`}
         const result = await updateBalance(data,header);
+        setShow(false)
           }
         }
     }
     const handleDeposit = async() =>{
         setShow2(true);
         var bal=0
-        console.log(balance)
         bal=eval(balance+parseInt(amount))
         if(amount>0){
-        console.log(history)
         data={balance:bal,history:" + "+amount}
         setAmount(0)
         const header = {"Authorization":`Bearer ${sessionStorage.getItem('token')}`}
         const result = await updateBalance(data,header);
+        setShow2(false)
         }
     
     }
@@ -59,13 +59,11 @@ function User() {
             const header = {"Authorization":`Bearer ${sessionStorage.getItem('token')}`}
               const res = await getBalance(header);
               setBalance(res.data.balance);
-              console.log(res.data.balance)
     }
 
     const getHistory = async() =>{
       const header = {"Authorization":`Bearer ${sessionStorage.getItem('token')}`}
       const res = await getBalance(header);
-      console.log(res.data.history)
       setHistory(res.data.history)
       setShow3(true)
 }
@@ -116,7 +114,6 @@ function User() {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-         
         </Modal.Footer>
       </Modal>
 

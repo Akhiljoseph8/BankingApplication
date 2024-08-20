@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import { userRegister, userLogin } from "../services/allApis";
+import { adminLogin } from "../services/allApis";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-function Auth() {
+function Login() {
   const [status, setStatus] = useState(true);
   const [data, setData] = useState({
     username: "",
@@ -14,28 +14,9 @@ function Auth() {
     email: "",
   });
 
-  const changeStatus = () => {
-    setStatus(!status);
-  };
 
   const navigate = useNavigate("");
 
-//Register handling function
-  const handleRgister = async () => {
-    const { username, password, email } = data;
-    if (!username || !password || !email) {
-      toast.warning("Invalid Inputs!! Enter all inputs!!");
-    } else {
-      const result = await userRegister(data);
-      if (result.status == 200) {
-        toast.success("Registration successfull");
-        setData({ username: "", password: "", email: "" });
-        window.location.reload();
-      } else {
-        toast.error(result.response.data);
-      }
-    }
-  };
 
   //Login handling function
   const handleLogin = async () => {
@@ -43,13 +24,13 @@ function Auth() {
     if (!password || !email) {
       toast.warning("Invalid Inputs!! Enter all inputs!!");
     } else {
-      const result = await userLogin({ email, password });
+      const result = await adminLogin({ email, password });
       if (result.status == 200) {
         toast.success("Login successfull");
         sessionStorage.setItem("token", result.data.token);
-        sessionStorage.setItem("username", result.data.user);
+        sessionStorage.setItem("admin","admin");
         sessionStorage.setItem("userId", result.data.userId);
-        navigate("/user");
+        navigate("/admin");
       } else {
         toast.error(result.response.data);
       }
@@ -63,14 +44,10 @@ function Auth() {
         className="w-100 d-flex justify-content-center align-items-center"
         style={{ height: "90vh" }}
       >
-        <div className="w-10 bg-info border shadow ">
+        <div className="w-10 bg-danger border shadow ">
         <Row>
           <Col className="p-5">
-            {status ? (
-              <h3 className="mb-3">Login</h3>
-            ) : (
-              <h3 className="mb-3">Register</h3>
-            )}
+              <h3 className="mb-3">Admin Login</h3>
             <div>
               {!status && (
                 <FloatingLabel
@@ -112,42 +89,21 @@ function Auth() {
                 />
               </FloatingLabel>
               <div className="mt-3 d-flex justify-content-between">
-                {status ? (
+            
                   <button
                     className="btn btn-success"
                     onClick={handleLogin}
                   >
                     Login
                   </button>
-                ) : (
-                  <button
-                    className="btn btn-success"
-                    onClick={handleRgister}
-                  >
-                    Register
-                  </button>
-                )}
-
-                <button
-                  className="btn btn-link text-dark"
-                  onClick={changeStatus}
-                >
-                  {status ? (
-                    <span>New User?</span>
-                  ) : (
-                    <span>Already a User?</span>
-                  )}
-                </button>
               </div>
             </div>
           </Col>
         </Row>
-        <Row><a className="text-center text-danger" href="/admin-login">Admin Login</a></Row>
-        
         </div>
       </div>
     </>
   );
 }
 
-export default Auth;
+export default Login;

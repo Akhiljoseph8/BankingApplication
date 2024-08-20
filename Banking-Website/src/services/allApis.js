@@ -28,3 +28,7 @@ export const allUsers = async (header) => {
 export const removeUser = async(id)=>{
     return await commonApi("DELETE",`${base_url}/delete-user/${id}`,{},"")
 }
+
+export const adminLogin = async (data) => {
+    return await commonApi("POST", `${base_url}/admin-login`, data, "")
+}

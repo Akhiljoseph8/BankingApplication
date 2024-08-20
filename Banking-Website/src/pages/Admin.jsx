@@ -1,17 +1,23 @@
 import React, { useState } from 'react'
 import { allUsers,removeUser } from '../services/allApis'
 import { useEffect } from 'react'
-
+import { useNavigate } from 'react-router-dom'
+import Header from '../components/Header'
 function Admin() {
 const [users, setUsers] = useState([])
+const navigate = useNavigate("");
 useEffect(() => {
-  getAllUsers()
+  if(sessionStorage.getItem("admin")){
+    getAllUsers()
+  }else{
+    navigate("/admin-login");
+  }
+  
 }, [users])
 
     const getAllUsers=async()=>{
         const result = await allUsers()
         setUsers(result.data)
-        console.log(result.data)
     }
    
     const deleteUser=async(id)=>{
@@ -21,6 +27,7 @@ useEffect(() => {
 
   return (
     <>
+    <Header/>
     <div>
         <table className='table'>
             <thead>

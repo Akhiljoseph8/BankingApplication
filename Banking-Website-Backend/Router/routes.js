@@ -11,5 +11,6 @@ router.put('/update-balance',jwtMiddleware,userController.updateBalance)
 router.get('/get-balance',jwtMiddleware,userController.getBalance )
 router.get('/all-users',adminController.getAllUsers)
 router.delete('/delete-user/:id',adminController.deleteUser)
+router.post('/admin-login', adminController.adminLogin)
 
 module.exports = router

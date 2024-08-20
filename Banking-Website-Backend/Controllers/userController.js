@@ -32,7 +32,7 @@ exports.userLogin = async (req, res) => {
 
             res.status(200).json({ token, user: existingUser.username, userId: existingUser._id })
         } else {
-            res.status(406).json("Invalid username/password")
+            res.status(406).json("Invalid mail/password")
         }
     }
     catch (err) {
@@ -50,7 +50,6 @@ exports.updateBalance = async (req, res) => {
         })
         const t = await users.findByIdAndUpdate(userId, updateData)
         const h= await users.updateOne({_id:userId},{$push: {history:history}})
-        console.log(t)
         res.status(200).json(t)
     }
     catch (err) {
